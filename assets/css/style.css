@@ -1,0 +1,13 @@
+body {
+    background: skyblue;
+}
+
+#animalForm {
+    position: relative;
+    left: 900px; 
+}
+
+#animalButtons {
+    position: relative;
+    align: center;
+}
