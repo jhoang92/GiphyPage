@@ -1,7 +1,6 @@
 # GiphyPage
-This is a page made using Giphy API and ajax. It gives you random gifs of select animals that can be added using an input. The animals are then displayed based on a maturity content rating scale.
+This is a pproject that is made using Giphy AP ajax, and a small amount of bootstrap. It gives you random gifs of an animal based on the button clicked at the top. You can also add an animal to the list and get images of said animal. Each time you click a button, a list of 10 gifs will popup and be displayed along with its rating(PG, PG-13, G, R, NC-17).
+
 
 # Psuedocode
-Have buttons render properly
-have search box add new buttons
-have page display gifs.
+Page is still missing the ability to pause and play gif images. 
