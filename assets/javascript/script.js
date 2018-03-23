@@ -1,66 +1,69 @@
-$(document).ready(function () {
-    var animalArray = [["Dogs"], ["Cats"], ["Rabbits"], ["Birds"], ["Snakes"]];
-    renderButtons();
+var animalArray = [["Dogs"], ["Cats"], ["Rabbits"], ["Birds"], ["Snakes"]];
+renderButtons();
 
-    function renderButtons() {
-        $("#animalButtons").empty();
-        for (var i = 0; i < animalArray.length; i++) {
-            var buttons = $("<button>").addClass("animalList");
-            buttons.text(animalArray[i]);
-            buttons.attr("data-animal", animalArray[i]);
-            $("#animalButtons").append(buttons);
-        }
+// this will create our buttons from the array
+function renderButtons() {
+    // emptying our list of buttons
+    $('#animalButtons').empty();
 
-        $("#addAnimal").on("click", function (event) {
-            event.preventDefault();
-            var newAnimal = $("#animal-input").val().trim();
-            if (newAnimal === "") {
-                return false;
-            } else $("#animal-input").val("");
-            renderButtons();
-            return false;
-        })
+    for (var i = 0; i < animalArray.length; i++) {
+        var button = $('<button>').addClass('animalList');
+        button.attr('data-animal', animalArray[i]);
+        button.text(animalArray[i]);
+        $('#animalButtons').append(button);
+    }
 
-        $(document).on("click", ".animalList", function () {
-        var search = $(this).data("animal");
-        })
-        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + search + "api_key=Z4PoJ7702VhfPsQTH7YzzVIDWrNZsciw";
+    //this is going to create a new button each time we enter an animal
+    $('#addAnimal').on('click', function(event) {
+        event.preventDefault();
 
-        $.ajax({
-            url: queryURL,
-            method: "GET"
-        }).done(function (response) {
+        var newAnimal = $('#animal-input').val().trim();
+
+        animalArray.push(newAnimal);
+
+        renderButtons();
+    })
+};
+
+//this will gran the animal button created above and give it a click response
+$('.animalList').on('click', function() {
+    
+    var animal = $(this).attr('data-animal');
+    
+    var queryURL = 'https://api.giphy.com/v1/gifs/search?q=' + animal + '&api_key=Z4PoJ7702VhfPsQTH7YzzVIDWrNZsciw&limit=10';
+
+    $.ajax({
+        url: queryURL,
+        method: 'GET'
+    }).then(function(response) {
             var results = response.data;
-            $("#animals").empty();
 
-            for (var i = 0; i = animalArray.length; i++) {
-
-                var animalDiv = $('<div>').addClass('col-md-4 gif-container');
-
-                var p = $('<p>');
-                var gifImage = $('<img>').addClass('gif');
-                topicsImage.attr('src', results[i].images.fixed_height_still.url);
-                topicsImage.attr('data-animate', results[i].images.fixed_height.url);
-                topicsImage.attr('data-still', results[i].images.fixed_height_still.url);
-                topicsImage.attr('data-state', 'still');
-
+            for (var i = 0; i < results.length; i++) {
+                var gif = $('<div class="gifs">');
                 var rating = results[i].rating;
-                p = p.html("Rating: " + rating);
-                topicsDiv.append(topicsImage);
-                topicsDiv.append(p);
-                $('#animals').append(animalsDiv);
-            }
-        });
 
-        $(document).on('click', ".gif", function () {
-            var state = $(this).attr('data-state');
-            if (state == 'still') {
-                $(this).attr('src', $(this).data('animate'));
-                $(this).attr('data-state', 'animate');
-            } else {
-                $(this).attr('src', $(this).data('still'));
-                $(this).attr('data-state', 'still');
+                var p = $('<p>').text('rating: ' + rating);
+
+                var animalGif = $('<img>');
+                animalGif.attr('src', results[i].images.fixed_height.url);
+
+                gif.prepend(p);
+                gif.prepend(animalGif);
+
+                $('#animals').prepend(gif);
             }
-        });
-    };        
+        })
+});
+
+$(document).on('click', '.animalList', function() {
+    var state = $(this).attr('data-state');
+
+    if (state === 'still') {
+        $(this).attr('src', $(this).data('animate'));
+        $(this).attr('data-state', 'animate');
+    }else {
+        $(this).attr('src', $(this).data('still'));
+        $(this).attr('data-state', 'still');
+    }
+    console.log(state);
 });
